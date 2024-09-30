@@ -74,7 +74,6 @@ def point_guided_deformation(image, source_pts, target_pts, alpha=1.0, eps=1e-6)
         P_star2 = P_star2 + bag_ori[:,:,i]*source_pts[i][1]
 
     sum_3D = np.sum(bag_ori,axis=2)
-
     P_star1 = P_star1/sum_3D
     P_star2 = P_star2/sum_3D
 
@@ -123,7 +122,7 @@ def point_guided_deformation(image, source_pts, target_pts, alpha=1.0, eps=1e-6)
     det = a * d - b * c
     
     # 检查行列式是否为零，避免除零
-    det = det + 1e-6
+    det =det+ 1e-6  # 为了防止除零错误，设置非常小的值
     
     # 手动求逆
     Aj[0, 0, :, :] = d / det
@@ -156,7 +155,7 @@ def point_guided_deformation(image, source_pts, target_pts, alpha=1.0, eps=1e-6)
     map_x, map_y = result_array[0], result_array[1]
 
     # 使用 OpenCV 的 remap 函数重新映射图像像素
-    warped_image = cv2.remap(image, map_x.astype(np.float32), map_y.astype(np.float32), interpolation=cv2.INTER_CUBIC)
+    warped_image = cv2.remap(image, map_x.astype(np.float32), map_y.astype(np.float32), interpolation=cv2.INTER_LINEAR)
 
     warped_image = np.array(warped_image)
 
